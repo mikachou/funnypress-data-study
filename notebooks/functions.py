@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.decomposition import PCA
 import umap
-import umap.plot
 
 def pca_graph(X):
     pca = PCA()
@@ -33,3 +32,18 @@ def pca_graph(X):
     ax2.spines['right'].set_color('red')
 
     plt.show()
+
+def umap_plt(embed_X, y):
+    plt.figure(figsize=(12, 12))
+    ax = plt.gca()  # Get the current axis
+    # Set background colors
+    ax.set_facecolor('black')          # Axis background color
+    plt.gcf().set_facecolor('black')    # Figure background color
+    plt.scatter(embed_X[:, 0], embed_X[:, 1], s=.01, c=y.map({0: 'royalblue', 1: 'yellow'}))
+    plt.title("UMAP Projection", color='white')
+    ax.tick_params(colors='white')
+
+    return plt
+
+def umap_graph(embed_X, y):
+    umap_plt(embed_X, y).show()
