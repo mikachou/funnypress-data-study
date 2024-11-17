@@ -3,3 +3,4 @@ data/clean/*.csv
 __pycache__
 mlartifacts/
 mlruns/
+catboost_info/
