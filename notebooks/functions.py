@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.decomposition import PCA
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import accuracy_score, classification_report, f1_score, average_precision_score, make_scorer
 import umap
 
 from gensim.models import Word2Vec
@@ -12,6 +14,8 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import Embedding, GlobalAveragePooling1D
 import multiprocessing
+
+from optuna.integration import OptunaSearchCV
 
 def pca_graph(X):
     pca = PCA()
@@ -122,3 +126,40 @@ def word2vec_embed(sentences):
     print(embeddings.shape)
 
     return embeddings
+
+def train_model_with_optuna(vectorizer, model, param_distributions, X_train, y_train, X_test, y_test, cv=5, n_trials=20, scoring="f1", random_state=314):
+
+    # Define pipeline
+    pipeline = Pipeline([
+        ("vectorizer", vectorizer),
+        ("classifier", model)
+    ])
+    
+    # OptunaSearchCV for hyperparameter tuning
+    search = OptunaSearchCV(
+        pipeline,
+        param_distributions=param_distributions,
+        cv=cv,
+        n_trials=n_trials,
+        scoring=scoring,
+        random_state=random_state,
+        verbose=1,
+        #n_jobs=-1,
+    )
+    
+    # Fit the model
+    search.fit(X_train, y_train)
+
+    # Evaluate on test set
+    best_model = search.best_estimator_
+    y_pred = best_model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    #pr_auc = average_precision_score(y_test, y_pred)
+
+    print(f"Best parameters: {search.best_params_}")
+    print(f"Test Accuracy: {acc}")
+    print(f"F1 Score: {f1}")
+    print(classification_report(y_test, y_pred))
+    
+    return best_model, acc
