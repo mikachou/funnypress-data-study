@@ -127,11 +127,11 @@ def word2vec_embed(sentences):
 
     return embeddings
 
-def train_model_with_optuna(vectorizer, model, param_distributions, X_train, y_train, X_test, y_test, cv=5, n_trials=20, scoring="f1", random_state=314):
+def train_model_with_optuna(model, param_distributions, X_train_embeddings, y_train, X_test_embeddings, y_test, cv=5, n_trials=20, scoring="f1", random_state=314):
 
     # Define pipeline
     pipeline = Pipeline([
-        ("vectorizer", vectorizer),
+        #("vectorizer", vectorizer),
         ("classifier", model)
     ])
     
@@ -148,11 +148,11 @@ def train_model_with_optuna(vectorizer, model, param_distributions, X_train, y_t
     )
     
     # Fit the model
-    search.fit(X_train, y_train)
+    search.fit(X_train_embeddings, y_train)
 
     # Evaluate on test set
     best_model = search.best_estimator_
-    y_pred = best_model.predict(X_test)
+    y_pred = best_model.predict(X_test_embeddings)
     acc = accuracy_score(y_test, y_pred)
     f1 = f1_score(y_test, y_pred)
     #pr_auc = average_precision_score(y_test, y_pred)
