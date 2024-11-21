@@ -127,7 +127,7 @@ def word2vec_embed(sentences):
 
     return embeddings
 
-def train_model_with_optuna(model, param_distributions, X_train_embeddings, y_train, X_test_embeddings, y_test, cv=5, n_trials=20, scoring="f1", random_state=314):
+def train_model_with_optuna(model, param_distributions, X_train_embeddings, y_train, X_test_embeddings, y_test, cv=5, n_trials=20, scoring="f1", random_state=314, n_jobs=-1):
 
     # Define pipeline
     pipeline = Pipeline([
@@ -144,7 +144,7 @@ def train_model_with_optuna(model, param_distributions, X_train_embeddings, y_tr
         scoring=scoring,
         random_state=random_state,
         verbose=1,
-        #n_jobs=-1,
+        n_jobs=n_jobs,
     )
     
     # Fit the model
