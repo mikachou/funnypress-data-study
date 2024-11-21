@@ -9,7 +9,7 @@ import numpy as np
 import multiprocessing
 
 class Word2VecVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, w2v_size=300, w2v_window=5, w2v_min_count=1, w2v_epochs=100, maxlen=24):
+    def __init__(self, w2v_size=100, w2v_window=5, w2v_min_count=1, w2v_epochs=100, maxlen=24):
         self.w2v_size = w2v_size
         self.w2v_window = w2v_window
         self.w2v_min_count = w2v_min_count
