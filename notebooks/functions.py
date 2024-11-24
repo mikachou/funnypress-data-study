@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, TruncatedSVD
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score, classification_report, f1_score, average_precision_score, make_scorer
 import umap
