@@ -4,3 +4,5 @@ __pycache__
 mlartifacts/
 mlruns/
 catboost_info/
+model_exports/*
+!model_exports/.gitkeep
